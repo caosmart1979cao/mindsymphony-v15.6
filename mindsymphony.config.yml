@@ -1,0 +1,26 @@
+﻿# mindsymphony.config.yml - v15.6 技能纯化版
+
+# 1. 蜂后配置区 (Macro-Orchestration)
+queen:
+  strategy:
+    decomposition_mode: balanced
+    max_concurrent_workers: 5
+
+# 2. 技能注册区 (Skill Registration)
+skills:
+  - name: "knowledge-explorer"
+    description: "负责深度研究与分析的学者技能。"
+  - name: "concept-singularity"
+    description: "负责快速原型与概念可视化的创作者技能。"
+  - name: "image-converter"
+    description: "一个稳定的技能，用于将各种图像格式转换为PNG。"
+  - name: "code-refactoring-workflow"
+    description: "一个由多个代码处理技能构成的、用于执行代码重构的完整工作流。"
+
+# 3. 信息素订阅区 (Pheromone Subscriptions)
+pheromones:
+  - on_event: "research.completed"
+    from_unit: "knowledge-explorer" 
+    action:
+      trigger_unit: "concept-singularity"
+      with_task: "Visualize the key findings from the research report."

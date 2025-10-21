@@ -1,0 +1,37 @@
+“信息素通信协议”标准 v1.0
+
+1. 核心目标: 为“工蜂单元”之间提供的一种去中心化、事件驱动的通信机制，实现工作流的自发、自动和高效流转。其订阅关系由 mindsymphony.config.yml 文件定义。
+ 
+2. 消息结构 (Message Structure):
+ 
+所有在系统总线上传递的“信息素”都必须是一个标准化的JSON对象，包含以下字段：
+ 
+pheromone_id: (String) 唯一的事件ID。
+ 
+timestamp: (ISO 8601 String) 事件发生的时间戳。
+ 
+source_unit: (String) 广播此信息素的“工蜂单元”名称。
+ 
+event_type: (String) 事件类型，必须遵循 [domain].[event] 的命名规范，如 research.completed 或 file.write_failed。
+ 
+payload: (Object) 携带的具体数据。
+ 
+3. 核心事件类型 (Core Event Types):
+ 
+task.completed: 表示一个子任务成功完成。
+ 
+task.failed: 表示一个子任务执行失败。
+ 
+data.ready: 表示某项数据已准备就绪，可供其他单元使用。
+ 
+system.heartbeat: 系统定时广播的心跳信号。
+ 
+(可根据 mindsymphony.config.yml 动态扩展)
+ 
+4. 订阅与路由逻辑 (Subscription & Routing Logic):
+ 
+系统启动时，[M-08] 配置管家 负责读取 pheromones 配置区。
+ 
+[M-08] 会在系统内部构建一个“事件路由表”，明确定义当某种类型的“信息素”被广播时，应激活哪一个“工蜂单元”。
+ 
+这种设计将工作流的“编排”固化在了配置文件中，实现了真正的“配置即协奏”。

@@ -1,0 +1,37 @@
+“工蜂单元”标准协议 v1.0
+
+1. 核心目标: “工蜂单元”是“蜂巢协奏”系统的基础执行单位。它是一个被智能化封装的、自主的“微型智能体”，由一个或多个专业灵魂构成，其构成与可用性由 mindsymphony.config.yml 文件定义。
+ 
+2. 接口详述 (Input/Output Interface):
+ 
+输入 (Input): 必须接收一个标准化的JSON对象“子任务包 (Sub-task Package)”。该对象必须包含以下字段：
+ 
+task_id: (String) 唯一的任务ID，用于追踪。
+ 
+task_name: (String) 任务的简短名称，如 "ResearchTopic"。
+ 
+payload: (Object) 任务所需的具体数据，如 {"topic": "Quantum Entanglement"}。
+ 
+on_completion: (Object) 任务完成后需要执行的动作，如 {"broadcast_pheromone": "research.completed"}。
+ 
+输出 (Output): 任务完成后，必须通过“信息素协议”广播一个标准化的JSON对象“任务成果报告 (Task Result Report)”，或根据 on_completion 字段执行指定动作。
+ 
+3. 生命周期 (Lifecycle):
+ 
+待命 (Idle): 单元已加载，等待“蜂后”的任务派遣。
+ 
+激活 (Active): 接收到任务包，开始自主执行内部工作流。
+ 
+执行 (Executing): 正在调用内部灵魂进行协同工作。
+ 
+完成 (Completed): 任务成功，准备广播“信息素”。
+ 
+失败 (Failed): 任务执行中出现错误，准备广播“错误信息素”。
+ 
+4. 错误处理规范 (Error Handling Standards):
+ 
+当单元内部执行失败时，必须捕获错误并立即中止任务。
+ 
+必须向系统广播一个 *.failed 类型的“信息素”，其 payload 中必须包含 task_id 和详细的错误信息 error_message。
+ 
+不允许单元内部的错误“静默失败”，所有异常都必须上报至系统事件总线。
