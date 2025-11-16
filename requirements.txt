@@ -1,0 +1,18 @@
+# MindSymphony v15.6 - Evolution Edition
+# Dependencies for the evolved system
+
+# Core dependencies
+numpy>=1.24.0
+psutil>=5.9.0
+
+# Performance optimization (optional but recommended)
+# hnswlib>=0.7.0  # For production HNSW indexing (requires C++ compiler)
+
+# MCP protocol support (optional)
+# fastapi>=0.100.0  # For HTTP MCP server
+# uvicorn>=0.23.0   # ASGI server
+
+# Development dependencies
+# pytest>=7.4.0
+# black>=23.7.0
+# flake8>=6.1.0
