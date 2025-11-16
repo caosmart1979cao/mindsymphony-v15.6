@@ -1,4 +1,10 @@
-﻿# mindsymphony.config.yml - v15.6 技能纯化版
+﻿# mindsymphony.config.yml - v15.6 进化版
+# Evolved with claude-flow inspired features:
+# - Hybrid memory system (AgentDB + ReasoningBank)
+# - Fault tolerance & auto-recovery
+# - Semantic skill auto-activation
+# - Performance monitoring
+# - Reinforcement learning
 
 # 1. 蜂后配置区 (Macro-Orchestration)
 queen:
@@ -6,21 +12,173 @@ queen:
     decomposition_mode: balanced
     max_concurrent_workers: 5
 
-# 2. 技能注册区 (Skill Registration)
+    # 新增：容错与自愈能力
+    fault_tolerance:
+      auto_retry: true
+      max_retries: 3
+      retry_backoff: exponential  # exponential, linear, constant
+      base_delay_ms: 2000
+      timeout_ms: 300000
+
+    # 恢复策略
+    recovery_strategy:
+      on_skill_failure: graceful_degrade  # graceful_degrade, fallback, skip, abort
+      on_timeout: partial_commit
+      circuit_breaker_threshold: 5
+      circuit_breaker_timeout: 60
+
+    # 健康监控
+    health_monitoring:
+      enabled: true
+      heartbeat_interval_s: 30
+      auto_recovery: true
+
+# 2. 混合记忆系统 (Hybrid Memory System)
+memory_system:
+  # AgentDB: 向量语义搜索
+  semantic_memory:
+    enabled: true
+    engine: vector_db
+    index_type: hnsw  # HNSW for O(log n) complexity
+    dimensions: 1536
+    quantization_bits: 8  # 4-32x memory reduction
+    retention_days: 90
+
+  # ReasoningBank: 模式匹配
+  pattern_memory:
+    enabled: true
+    engine: sqlite
+    db_path: .mindsymphony/reasoning_bank.sqlite
+    cache_size: 10000
+    target_query_latency_ms: 3
+
+  # 执行历史
+  skill_execution_history:
+    enabled: true
+    track_metrics: true
+    track_embeddings: true
+
+# 3. 性能监控与优化 (Performance Monitoring)
+performance:
+  profiling:
+    enabled: true
+    track_skill_latency: true
+    track_memory_usage: true
+    track_success_rate: true
+
+  # 性能目标
+  targets:
+    p95_latency_ms: 500
+    success_rate: 0.95
+
+  # 优化策略
+  optimization:
+    skill_preloading: true
+    connection_pooling: true
+    lazy_loading: true
+    auto_benchmark: true
+
+# 4. 强化学习系统 (Reinforcement Learning)
+learning_system:
+  enabled: true
+  mode: post_task_learning
+
+  # 学习算法
+  algorithms:
+    - pattern_extraction
+    - skill_composition
+    - q_learning
+
+  # 学习参数
+  parameters:
+    learning_rate: 0.1
+    discount_factor: 0.9
+    exploration_rate: 0.1
+
+  # 反馈循环
+  feedback_loop:
+    collect_metrics: true
+    success_criteria:
+      min_success_rate: 0.95
+      min_user_satisfaction: 4.0
+      max_execution_time_factor: 1.2
+
+  # 模式固化
+  pattern_consolidation:
+    enabled: true
+    min_success_count: 3
+    confidence_threshold: 0.9
+    auto_create_workflow: true
+
+# 5. 语义技能激活 (Semantic Skill Auto-Activation)
+semantic_activation:
+  enabled: true
+  confidence_threshold: 0.6
+
+  # 意图识别
+  intent_recognition:
+    enabled: true
+    categories:
+      - deployment
+      - research
+      - creation
+      - optimization
+      - testing
+      - documentation
+
+  # 自动路由
+  auto_routing:
+    enabled: true
+    suggest_alternatives: true
+    top_k_suggestions: 5
+
+# 6. MCP 协议集成 (MCP Protocol Integration)
+mcp_integration:
+  enabled: true
+  server_port: 8080
+  expose_as_tools: true
+  claude_code_integration: true
+
+# 7. 技能注册区 (Skill Registration)
 skills:
   - name: "knowledge-explorer"
     description: "负责深度研究与分析的学者技能。"
+    semantic_triggers:
+      keywords: ["研究", "分析", "探索", "research", "analyze"]
+      priority: 60
+
   - name: "concept-singularity"
     description: "负责快速原型与概念可视化的创作者技能。"
+    semantic_triggers:
+      keywords: ["可视化", "原型", "概念", "visualize", "prototype"]
+      priority: 55
+
   - name: "image-converter"
     description: "一个稳定的技能，用于将各种图像格式转换为PNG。"
+    semantic_triggers:
+      keywords: ["图像", "转换", "convert", "image"]
+      priority: 50
+
   - name: "code-refactoring-workflow"
     description: "一个由多个代码处理技能构成的、用于执行代码重构的完整工作流。"
+    semantic_triggers:
+      keywords: ["重构", "优化代码", "refactor", "optimize"]
+      priority: 55
 
-# 3. 信息素订阅区 (Pheromone Subscriptions)
+# 8. 信息素订阅区 (Pheromone Subscriptions)
 pheromones:
   - on_event: "research.completed"
-    from_unit: "knowledge-explorer" 
+    from_unit: "knowledge-explorer"
     action:
       trigger_unit: "concept-singularity"
       with_task: "Visualize the key findings from the research report."
+
+  - on_event: "skill.failed"
+    action:
+      trigger_recovery: true
+      strategy: auto
+
+  - on_event: "pattern.consolidated"
+    action:
+      create_workflow_template: true
+      notify_user: true
